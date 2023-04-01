@@ -10,6 +10,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import { LoadingPage } from "~/components/Loading";
 import { useState } from "react";
+import { cn } from "~/utils/cn";
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
@@ -32,7 +33,7 @@ const CreatePostWizard = () => {
   if (!user) return null;
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="flex w-full gap-3 ">
       <Image
         src={user.profileImageUrl}
         alt="Profile Image"
@@ -43,12 +44,19 @@ const CreatePostWizard = () => {
       <input
         type="text"
         placeholder="Type some emojis!"
-        className="grow bg-transparent pl-3 outline-none"
+        className={cn("grow bg-transparent pl-3 outline-none", {
+          "rounded-md bg-gray-600/40": isPosting,
+        })}
         value={input}
         onChange={(e) => setInput(e.target.value)}
         disabled={isPosting}
       />
-      <button onClick={() => createPost({ content: input })}>Post</button>
+      <button
+        disabled={isPosting}
+        onClick={() => createPost({ content: input })}
+      >
+        Post
+      </button>
     </div>
   );
 };
@@ -96,7 +104,7 @@ const Feed = () => {
   if (!data) return <div>Something went wrong</div>;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col border-x border-slate-400">
       {data.map((fullPost) => (
         <PostsView {...fullPost} key={fullPost.post.id} />
       ))}
@@ -123,8 +131,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex justify-center">
-        <div className="h-screen w-full border-x border-slate-400 md:max-w-2xl">
-          <div className="border-b border-slate-400 p-4">
+        <div className="h-screen w-full  md:max-w-2xl">
+          <div className="border-x border-b border-slate-400 p-4">
             {!isSignedIn && (
               <div className="flex justify-center">
                 <SignInButton />
