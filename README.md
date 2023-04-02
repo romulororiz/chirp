@@ -79,6 +79,3 @@ The application can be deployed using any cloud platform that supports Node.js a
 
 ## Credits
 This project was created by [T3.gg](https://twitter.com/t3dotgg) as a tutorial on the T3 Stack
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for more information.
