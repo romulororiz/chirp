@@ -1,4 +1,4 @@
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -122,8 +122,13 @@ const Home: NextPage = () => {
   return (
     <PageLayout>
       {!isSignedIn && (
-        <div className="flex justify-center">
+        <div className="flex w-full justify-start border-b border-slate-400 p-3">
           <SignInButton />
+        </div>
+      )}
+      {!!isSignedIn && (
+        <div className="flex w-full justify-start border-b border-slate-400 p-3">
+          <SignOutButton />
         </div>
       )}
       {!!isSignedIn && <CreatePostWizard />}
