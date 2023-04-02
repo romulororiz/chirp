@@ -1,28 +1,84 @@
-# Create T3 App
+# Chirp
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Chirp is a social media application built with Next.js, trpc, TypeScript, and Tailwind CSS. (Not focused on styling)
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- User authentication using [Clerk.dev](https://clerk.dev/) Github OAuth
+- Posting functionality - Only emojis allowed 🐦🐦
+- Deleting post functionality if current user is post owner
+- Timeline displaying posts users
+- Profile pages for each user, displaying their posts
+- Responsive design using Tailwind CSS
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- Next.js
+- trpc
+- TypeScript
+- Tailwind CSS
+- Clerk.dev
+- Prisma
+- Planetscale
+- Upstash Redis
 
-## Learn More
+## Installation
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+1. Clone the repository:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+```sh
+git clone https://github.com/romulororiz/chirp.git
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+2. Navigate to the repository:
 
-## How do I deploy this?
+```sh
+cd chirp
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+3. Install dependencies:
+
+```sh
+npm install
+```
+
+4. Set up environment variables. Rename the .env.example file to .env.local and fill in the required values:
+
+```sh
+# Prisma
+# https://www.prisma.io/docs/reference/database-reference/connection-urls#env
+DATABASE_URL=
+
+# Clerk
+# https://docs.clerk.dev/
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+# Upstash
+# https://upstash.com/
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+```
+
+5. Start the development server:
+
+```sh
+npm run dev
+```
+
+6. Navigate to http://localhost:3000 in your browser.
+
+## Deployment
+
+The application can be deployed using any cloud platform that supports Node.js applications. Some popular options include:
+
+- [Vercel](https://vercel.com/)
+- [Heroku](https://heroku.com/)
+- [AWS Elastic Beanstalk](https://aws.amazon.com/pt/elasticbeanstalk/)
+- [Google Cloud Platform](https://cloud.google.com/)
+
+## Credits
+This project was created by [T3.gg](https://twitter.com/t3dotgg) as an tutorial to the T3 Stack
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for more information.
