@@ -1,19 +1,14 @@
-import {
-  SignInButton,
-  SignOutButton,
-  UserButton,
-  useUser,
-} from "@clerk/nextjs";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { api } from "~/utils/api";
-import Image from "next/image";
 import { LoadingPage, LoadingSpinner } from "~/components/Loading";
-import { cn } from "~/utils/cn";
-import Link from "next/link";
-import { PageLayout } from "~/components/layout";
 import { PostsView } from "~/components/PostView";
+import { PageLayout } from "~/components/layout";
+import { api } from "~/utils/api";
+import { cn } from "~/utils/cn";
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("");
