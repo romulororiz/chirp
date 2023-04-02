@@ -1,6 +1,6 @@
 # Chirp
 
-Chirp is a social media application built with Next.js, trpc, TypeScript, and Tailwind CSS. (Not focused on styling)
+Chirp is a social media application built with Next.js, trpc, TypeScript, and Tailwind CSS.
 
 ## Features
 
