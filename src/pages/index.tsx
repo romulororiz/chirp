@@ -43,7 +43,7 @@ const CreatePostWizard = () => {
       />
       <input
         type="text"
-        placeholder="Type some emojis!"
+        placeholder={isPosting ? "" : "Type some emojis!"}
         className={cn("grow bg-transparent pl-3 outline-none", {
           "rounded-md bg-gray-600/40": isPosting,
         })}
