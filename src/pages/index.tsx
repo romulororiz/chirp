@@ -1,16 +1,18 @@
+import { useState } from "react";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
-
+import toast from "react-hot-toast";
 import type { RouterOutputs } from "~/utils/api";
 import { api } from "~/utils/api";
 
+import Image from "next/image";
+import { cn } from "~/utils/cn";
+import { LoadingPage, LoadingSpinner } from "~/components/Loading";
+
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import Image from "next/image";
-import { LoadingPage } from "~/components/Loading";
-import { useState } from "react";
-import { cn } from "~/utils/cn";
+import { z } from "zod";
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
@@ -28,12 +30,21 @@ const CreatePostWizard = () => {
         // invalidate the query to refetch the data
         void ctx.posts.getAll.invalidate();
       },
+      onError: (err) => {
+        const errorMessageValidation = err.data?.zodError?.fieldErrors?.content;
+
+        if (errorMessageValidation && errorMessageValidation[0]) {
+          return toast.error(errorMessageValidation[0]);
+        } else {
+          return toast.error(err.message);
+        }
+      },
     });
 
   if (!user) return null;
 
   return (
-    <div className="flex w-full gap-3 ">
+    <div className="flex w-full items-center gap-3">
       <Image
         src={user.profileImageUrl}
         alt="Profile Image"
@@ -44,17 +55,37 @@ const CreatePostWizard = () => {
       <input
         type="text"
         placeholder={isPosting ? "" : "Type some emojis!"}
-        className={cn("grow bg-transparent pl-3 outline-none", {
-          "rounded-md bg-gray-600/40": isPosting,
-        })}
+        className={cn(
+          "h-10 grow rounded-md bg-gray-600/40 pl-3 text-sm outline-none placeholder:text-slate-100/30",
+          {
+            "cursor-not-allowed rounded-md bg-gray-600/40": isPosting,
+          }
+        )}
         value={input}
-        onChange={(e) => setInput(e.target.value)}
         disabled={isPosting}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            createPost({ content: input });
+          }
+        }}
       />
       <button
+        className={cn(
+          "flex h-fit items-center rounded-md bg-slate-200 px-3 py-1 text-slate-900",
+          {
+            "cursor-not-allowed bg-slate-200/80": isPosting,
+          }
+        )}
         disabled={isPosting}
         onClick={() => createPost({ content: input })}
       >
+        {isPosting && (
+          <span className="mr-2">
+            <LoadingSpinner size={14} />
+          </span>
+        )}
         Post
       </button>
     </div>
