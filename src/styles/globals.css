@@ -4,4 +4,17 @@
 
 body {
     @apply bg-black text-slate-100; 
+    overscroll-behavior: none;
 }
+
+*::-webkit-scrollbar {
+    @apply w-3 h-4;
+}
+    *::-webkit-scrollbar-track {
+    @apply bg-slate-100/20;
+}
+
+    *::-webkit-scrollbar-thumb {
+    @apply rounded-lg bg-slate-500;
+}
+        
