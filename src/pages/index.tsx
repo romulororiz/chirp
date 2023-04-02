@@ -76,7 +76,7 @@ const CreatePostWizard = () => {
       />
       <button
         className={cn(
-          "flex h-fit items-center rounded-md bg-[#1da1f2] px-5 py-1 text-slate-100",
+          "flex h-fit items-center rounded-md bg-[#1da1f2] px-3 py-1 text-slate-100",
           {
             "cursor-not-allowed bg-slate-200/80": isPosting,
           }
