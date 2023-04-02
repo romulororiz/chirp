@@ -1,4 +1,5 @@
-import { User } from "@clerk/nextjs/dist/api";
+import { useAuth } from "@clerk/nextjs";
+import type { Post } from "@prisma/client";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Trash2 } from "lucide-react";
@@ -16,12 +17,14 @@ type PostWithUser = RouterOutputs["posts"]["getAll"][number];
 export const PostsView = (props: PostWithUser) => {
   const { post, user } = props;
 
+  // get logged in user
+  const { userId } = useAuth();
+
   // check if logged in user is the owner of the post
-  const isPostOwner = (
-    post: PostWithUser["post"],
-    user: PostWithUser["user"]
-  ) => {
-    return user.id === post.authorId;
+  const isPostOwner = (post: Post, userId: string | null | undefined) => {
+    if (!userId) return false;
+
+    return userId === post.authorId;
   };
 
   const ctx = api.useContext();
@@ -64,7 +67,7 @@ export const PostsView = (props: PostWithUser) => {
           </Link>
         </div>
         <span className="mt-2 text-2xl">{post.content}</span>
-        {isPostOwner(post, user) && (
+        {isPostOwner(post, userId) && (
           <div className="mt-2 flex w-full justify-end gap-2">
             <button
               onClick={() => deletePost({ id: post.id })}
