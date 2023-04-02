@@ -12,6 +12,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
+// Add user from Clerk to each post object so we can display the username
 const addUserDataToPosts = async (posts: Post[]) => {
   const users = (
     await clerkClient.users.getUserList({
@@ -48,6 +49,28 @@ const ratelimit = new Ratelimit({
 });
 
 export const postsRouter = createTRPCRouter({
+  // Get a single post by ID
+  getById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const post = await ctx.prisma.post.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!post) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
+      }
+
+      //  Return type is a promise and not a post object
+      //  so i have to await it to get the post object
+      return (await addUserDataToPosts([post]))[0];
+    }),
+
   // Get all posts
   getAll: publicProcedure.query(async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
@@ -59,6 +82,37 @@ export const postsRouter = createTRPCRouter({
 
     return addUserDataToPosts(posts);
   }),
+
+  // delete a post - only the author can delete their own posts
+  delete: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const post = await ctx.prisma.post.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!post) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
+      }
+
+      if (post.authorId !== ctx.userId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not authorized to delete this post",
+        });
+      }
+
+      return ctx.prisma.post.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 
   // Create a new post
   create: privateProcedure

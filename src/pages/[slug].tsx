@@ -1,13 +1,10 @@
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import SuperJSON from "superjson";
 import { LoadingPage } from "~/components/Loading";
 import { PostsView } from "~/components/PostView";
 import { PageLayout } from "~/components/layout";
-import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
+import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { api } from "~/utils/api";
 
 const ProfileFeed = ({ userId }: { userId: string }) => {
@@ -16,8 +13,6 @@ const ProfileFeed = ({ userId }: { userId: string }) => {
   if (isLoading) return <LoadingPage />;
 
   if (!data || !data.length) return <div>User has no posts</div>;
-
-  console.log(data);
 
   return (
     <div className="flex flex-col">
@@ -64,12 +59,10 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: { prisma, userId: null },
-    transformer: SuperJSON, // optional - adds superjson serialization
-  });
-
+  // SSG is used to prefetch data for the page before it is rendered
+  // This is useful for pages that are not frequently updated
+  // and can be pre-rendered at build time
+  const ssg = generateSSGHelper();
   const slug = ctx.params?.slug;
 
   if (typeof slug !== "string") throw new Error("No Slug");
