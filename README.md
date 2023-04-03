@@ -78,4 +78,4 @@ The application can be deployed using any cloud platform that supports Node.js a
 - [Google Cloud Platform](https://cloud.google.com/)
 
 ## Credits
-This project was created by [T3.gg](https://twitter.com/t3dotgg) as a tutorial on the T3 Stack
+This project was created by [T3.gg](https://twitter.com/t3dotgg).
